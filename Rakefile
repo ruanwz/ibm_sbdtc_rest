@@ -13,7 +13,7 @@ begin
     gem.add_development_dependency "rspec", ">=1.2.9"
 		gem.add_dependency "thor", ">=0.11.8"
 		gem.add_dependency "jeweler", ">=1.4.0"
-		gem.add_dependency " rest-client", ">=1.0.4"
+		gem.add_dependency "rest-client", ">=1.0.4"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
