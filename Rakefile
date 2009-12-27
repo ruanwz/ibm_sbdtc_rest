@@ -12,8 +12,9 @@ begin
     gem.authors = ["David Ruan"]
     gem.add_development_dependency "rspec", ">=1.2.9"
     gem.add_development_dependency "cucumber", ">= 0"
+    gem.add_development_dependency "jeweler", ">= 1.4.0"
 		gem.add_dependency "thor", ">=0.11.8"
-		gem.add_dependency "jeweler", ">=1.4.0"
+		gem.add_dependency "json", ">=1.1.9"
 		gem.add_dependency "rest-client", ">=1.0.4"
 		gem.files = FileList['lib/**/*.rb', 'bin/*', '[A-Z]*', 'test/**/*'].to_a
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
