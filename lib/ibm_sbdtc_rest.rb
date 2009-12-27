@@ -27,14 +27,15 @@ $:.unshift File.dirname(__FILE__) unless
 require 'ibm_cloud_rest/monkeypatches'
 
 module IbmCloudRest
-  VERSION    = '0.33' unless self.const_defined?("VERSION")
+  VERSION    = '0.0.0' unless self.const_defined?("VERSION")
   
-  autoload :Server,       'IbmCloudRest/core/server'
-  autoload :Image,       'IbmCloudRest/core/image'
-  autoload :Instance,       'IbmCloudRest/core/instance'
-  autoload :Storage,       'IbmCloudRest/core/storage'
-  autoload :Address,       'IbmCloudRest/core/address'
-  autoload :Key,       'IbmCloudRest/core/key'
+  autoload :Server,       'ibm_cloud_rest/core/server'
+  autoload :Image,       'ibm_cloud_rest/core/image'
+  autoload :Instance,       'ibm_cloud_rest/core/instance'
+  autoload :Storage,       'ibm_cloud_rest/core/storage'
+  autoload :Address,       'ibm_cloud_rest/core/address'
+  autoload :Key,       'ibm_cloud_rest/core/key'
+  autoload :Request,       'ibm_cloud_rest/core/request'
   
   
   require File.join(File.dirname(__FILE__), 'ibm_cloud_rest', 'core', 'rest_api')
@@ -86,32 +87,38 @@ module IbmCloudRest
     end
     
     def parse url
+		  base_path_pattern=/\/cloud\/developer\/api\/rest\/\d+/
       case url
-      when /^http:\/\/(.*)\/(.*)\/(.*)/
+      when /(^https:\/\/.*)(#{base_path_pattern})\/(.*)\/(.*)/
         host = $1
-        db = $2
-        docid = $3
-      when /^http:\/\/(.*)\/(.*)/
+				bash_path = $2
+        object = $3
+        docid = $4
+      when /(^https:\/\/.*)(#{base_path_pattern})\/(.*)/
         host = $1
-        db = $2
-      when /^http:\/\/(.*)/
+				bash_path = $2
+        object = $3
+      when /(^https:\/\/.*)/
         host = $1
-      when /(.*)\/(.*)\/(.*)/
+      when /(.*)(#{base_path_pattern})\/(.*)\/(.*)/
         host = $1
-        db = $2
-        docid = $3
-      when /(.*)\/(.*)/
+				bash_path = $2
+        object = $3
+        docid = $4
+      when /(.*)(#{base_path_pattern})\/(.*)/
         host = $1
-        db = $2
+				bash_path = $2
+        object = $3
       else
-        db = url
+        object = url
       end
 
-      db = nil if db && db.empty?
-
+      object = nil if object && object.empty?
+      # https://www.ibm.com/cloud/developer/api/rest/20090403/
       {
-        :host => host || "127.0.0.1:5984",
-        :database => db,
+        :host => host || "https://www.ibm.com",
+				:base_path=> base_path || "/cloud/developer/api/rest/20090403",
+        :object => object,
         :doc => docid
       }
     end
@@ -121,18 +128,24 @@ module IbmCloudRest
       HttpAbstraction.proxy = url
     end
 
+    def instances url
+      parsed = parse url
+      cr = IbmCloudRest.new(parsed[:host],parsed[:base_path])
+      cr.instances
+    end
+ 
     # ensure that a database exists
     # creates it if it isn't already there
     # returns it after it's been created
     def database! url
       parsed = parse url
-      cr = IbmCloudRest.new(parsed[:host])
+      cr = IbmCloudRest.new(parsed[:host],parsed[:base_path])
       cr.database!(parsed[:database])
     end
   
     def database url
       parsed = parse url
-      cr = IbmCloudRest.new(parsed[:host])
+      cr = IbmCloudRest.new(parsed[:host],parsed[:base_path])
       cr.database(parsed[:database])
     end
     

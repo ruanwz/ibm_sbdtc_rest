@@ -14,7 +14,15 @@ require 'pp'
 
 class IbmCloudAdmin < Thor
   map "-h" => :help
+  map "-li" => :list_instances
   map "-v" => :version
+  map "--list_instances" => :list_instances
+
+  desc 'list_instances', "list the current instances of IbmCloudAdmin"
+  def list_instances
+		server = IbmCloudRest.new
+		puts JSON.pretty_generate(server.instances)
+  end
 
   desc 'version', "the current version of IbmCloudAdmin"
   def version
@@ -31,6 +39,7 @@ class IbmCloudAdmin < Thor
 
       Options:
       -g, --generate                   Run the generate command to build a project
+      -li, --list_instances            List all instances
       -j, --just_recipe                Run the just_recipe command to only run specified recipes, templates, etc.
       -d, --display                    Instead of running, show the template or recipe body
       -r, --recipes                    Recipes to use

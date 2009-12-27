@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/ibm_cloud_rest/core/image.rb",
      "lib/ibm_cloud_rest/core/instance.rb",
      "lib/ibm_cloud_rest/core/key.rb",
+     "lib/ibm_cloud_rest/core/request.rb",
      "lib/ibm_cloud_rest/core/rest_api.rb",
      "lib/ibm_cloud_rest/core/server.rb",
      "lib/ibm_cloud_rest/core/storage.rb",
