@@ -1,6 +1,67 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
-require 'Isbdtc'
-exit Isbdtc::Application.run!(*ARGV)
 
+require 'rubygems'
+require 'thor'
+begin
+  if RUBY_VERSION <= '1.8.6'
+    require 'ruby-debug'
+  end
+rescue LoadError
+end
+$:.unshift(File.dirname(__FILE__) + '/../lib')
+require 'ibm_sbdtc_rest'
+require 'pp'
+
+class IbmCloudAdmin < Thor
+  map "-h" => :help
+  map "-v" => :version
+
+  desc 'version', "the current version of IbmCloudAdmin"
+  def version
+    version_file = File.dirname(__FILE__) + '/../VERSION'
+    if File.exists?(version_file) and version = File.read(version_file)
+      puts "IbmCloudAdmin version: #{version}"
+    end
+  end
+
+  desc 'help', 'help output'
+  def help
+    puts %{
+      Usage: #{$0} /path/to/your/app [options]
+
+      Options:
+      -g, --generate                   Run the generate command to build a project
+      -j, --just_recipe                Run the just_recipe command to only run specified recipes, templates, etc.
+      -d, --display                    Instead of running, show the template or recipe body
+      -r, --recipes                    Recipes to use
+      -s, --save                       Save current set of options
+      -u, --use                        Use a saved set of options
+      --gems                           Gems to include
+
+      IbmCloudAdmin Info:
+      -v, --version                    Show the IbmCloudAdmin version number and quit.
+      -l, --list                       Show the various recipes known to IbmCloudAdmin and quit.
+      -h, --help                       Show this help message and quit.
+
+      General Options:
+
+      Description:
+      IbmCloudAdmin is used for Ibm Cloud Service.
+
+      Example:
+    } 
+  end
+end
+def method_missing(*args)
+  unless @activesupport_required
+    require 'activesupport'
+    @activesupport_required = true
+    m = args.shift
+    send(m, *args)
+  else
+    super
+  end
+end
+
+IbmCloudAdmin.start
 

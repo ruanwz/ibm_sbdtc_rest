@@ -15,6 +15,7 @@ begin
 		gem.add_dependency "thor", ">=0.11.8"
 		gem.add_dependency "jeweler", ">=1.4.0"
 		gem.add_dependency "rest-client", ">=1.0.4"
+		gem.files = FileList['lib/**/*.rb', 'bin/*', '[A-Z]*', 'test/**/*'].to_a
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

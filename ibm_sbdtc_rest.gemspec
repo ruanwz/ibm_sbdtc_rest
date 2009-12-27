@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Ruan"]
-  s.date = %q{2009-12-23}
+  s.date = %q{2009-12-27}
   s.default_executable = %q{ibmcloud_admin}
   s.description = %q{isbdtc rest api client}
   s.email = %q{ruanwz@gmail.com}
@@ -19,21 +19,28 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    ".document",
-     ".gitignore",
-     "LICENSE",
+    "LICENSE",
      "README.rdoc",
      "Rakefile",
      "VERSION",
      "bin/ibmcloud_admin",
-     "features/ibm_sbdtc_rest.feature",
-     "features/step_definitions/ibm_sbdtc_rest_steps.rb",
-     "features/support/env.rb",
-     "ibm_sbdtc_rest.gemspec",
-     "lib/ibm_sbdtc_rest.rb",
-     "spec/ibm_sbdtc_rest_spec.rb",
-     "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "lib/ibm_cloud_rest/core/adapters/restclient.rb",
+     "lib/ibm_cloud_rest/core/address.rb",
+     "lib/ibm_cloud_rest/core/database.rb",
+     "lib/ibm_cloud_rest/core/http_abstraction.rb",
+     "lib/ibm_cloud_rest/core/image.rb",
+     "lib/ibm_cloud_rest/core/instance.rb",
+     "lib/ibm_cloud_rest/core/key.rb",
+     "lib/ibm_cloud_rest/core/rest_api.rb",
+     "lib/ibm_cloud_rest/core/server.rb",
+     "lib/ibm_cloud_rest/core/storage.rb",
+     "lib/ibm_cloud_rest/mixins.rb",
+     "lib/ibm_cloud_rest/mixins/callbacks.rb",
+     "lib/ibm_cloud_rest/monkeypatches.rb",
+     "lib/ibm_cloud_rest/support/blank.rb",
+     "lib/ibm_cloud_rest/support/class.rb",
+     "lib/ibm_cloud_rest/support/rails.rb",
+     "lib/ibm_sbdtc_rest.rb"
   ]
   s.homepage = %q{http://github.com/ruanwz/ibm_sbdtc_rest}
   s.rdoc_options = ["--charset=UTF-8"]
