@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Ruan"]
-  s.date = %q{2009-12-27}
+  s.date = %q{2009-12-28}
   s.default_executable = %q{ibmcloud_admin}
   s.description = %q{isbdtc rest api client}
   s.email = %q{ruanwz@gmail.com}

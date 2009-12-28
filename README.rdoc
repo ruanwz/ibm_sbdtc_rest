@@ -1,6 +1,15 @@
 = ibm_sbdtc_rest
 
-Description goes here.
+Manager Client and REST API Lib for IBM Smart Business Development & Test on the IBM Cloud.
+
+API version: 20090403
+
+To use this gem, you first need to register an account on https://www.ibm.com/cloud/developer
+
+== Usage Example for Manager Client 
+
+To list all instances:
+ibmcloud_admin -li
 
 == Note on Patches/Pull Requests
  

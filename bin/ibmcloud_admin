@@ -14,14 +14,156 @@ require 'pp'
 
 class IbmCloudAdmin < Thor
   map "-h" => :help
-  map "-li" => :list_instances
+  map "list" => :list
+  map "instance" => :instance
+  map "image" => :image
+  map "address" => :address
+  map "storage" => :storage
+  map "request" => :request
+  map "key" => :key
   map "-v" => :version
-  map "--list_instances" => :list_instances
 
-  desc 'list_instances', "list the current instances of IbmCloudAdmin"
-  def list_instances
-		server = IbmCloudRest.new
-		puts JSON.pretty_generate(server.instances)
+  desc 'key [key_name] [operation]', "operation for a specific key"
+  def key(key_name,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  request = IbmCloudRest::Instance.new
+      json_result=request.send(operation_method.to_sym, key_name)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation dos not exists for this object'
+		end
+  end
+
+  desc 'request [id] [operation]', "operation for a specific request"
+  def request(id,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  request = IbmCloudRest::Instance.new
+      json_result=request.send(operation_method.to_sym, id)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation dos not exists for this object'
+		end
+  end
+
+  desc 'instance [id] [operation]', "operation for a specific instance"
+  def instance(id,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  instance = IbmCloudRest::Instance.new
+      json_result=instance.send(operation_method.to_sym, id)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation dos not exists for this object'
+		end
+  end
+
+  desc 'storage [id] [operation]', "operation for a specific storage"
+  def storage(id,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  storage = IbmCloudRest::Storage.new
+      json_result=storage.send(operation_method.to_sym, id)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation does not exists for this object'
+		end
+  end
+
+  desc 'address [id] [operation]', "operation for a specific address"
+  def address(id,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  address = IbmCloudRest::Address.new
+      json_result=address.send(operation_method.to_sym, id)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation dos not exists for this object'
+		end
+  end
+
+  desc 'image [id] [operation]', "operation for a specific image"
+  def image(id,operation)
+		operation_method = case operation
+						           when "list" then :get			
+						           else nil
+						           end
+		if operation_method
+		  image = IbmCloudRest::Image.new
+      json_result=image.send(operation_method.to_sym, id)
+		  puts JSON.pretty_generate(json_result)
+		else
+      raise 'This operation does not exists for this object'
+		end
+  end
+
+
+  desc 'list [objects]', "list the current objects of IbmCloudAdmin"
+  def list(objects='instances')
+		list_objects= case objects
+									when "images" then :images			
+									when "instances" then :instances		
+									when "keys" then :keys		
+									when "addresses" then :addresses		
+									when "storages" then :storages		
+									else nil
+									end
+		if list_objects
+		  server = IbmCloudRest.new
+      json_result=server.send(list_objects.to_sym)
+		  #puts JSON.pretty_generate(json_result)
+      if objects =~ /instances/
+        puts "Instance List"
+        puts "----------------------------------------------"
+        json_result[objects].each do |e| 
+          puts "name: "+e["name"]
+          puts "id: "+e["id"]
+          puts "ip: "+e["ip"]
+          puts "hostname: "+e["hostname"]
+          puts "software_name: "+e["software"][0]["name"]
+          puts "requestId: " +e["requestId"]
+          puts "requestName: " +e["requestName"]
+          puts "imageId: " +e["imageId"]
+          puts "instanceType: " +e["instanceType"]
+          puts "status: "+IbmCloudRest::Instance::STATUS[e["status"]]
+          puts "expirationTime: "+ Time.at((e["expirationTime"].to_i)/1000).to_s
+          puts "----------------------------------------------"
+        end
+      end
+      if objects =~ /images/
+        puts "Image List"
+        puts "----------------------------------------------"
+        json_result[objects].each do |e| 
+          puts "name: "+e["name"]
+          puts "id: "+e["id"]
+          puts "description: "+e["description"]
+          puts "platform: "+e["platform"]
+          puts "supportedInstanceTypes: " +e["supportedInstanceTypes"].join('/')
+          puts "state: "+IbmCloudRest::Image::STATES[e["state"]]
+          puts "createdTime: "+ Time.at((e["createdTime"].to_i)/1000).to_s
+          puts "----------------------------------------------"
+        end
+      end
+
+		else
+      raise 'This objects does not exists for list command'
+		end
   end
 
   desc 'version', "the current version of IbmCloudAdmin"
@@ -35,29 +177,28 @@ class IbmCloudAdmin < Thor
   desc 'help', 'help output'
   def help
     puts %{
-      Usage: #{$0} /path/to/your/app [options]
+      Usage: #{$0} command [parameters]
 
-      Options:
-      -g, --generate                   Run the generate command to build a project
-      -li, --list_instances            List all instances
-      -j, --just_recipe                Run the just_recipe command to only run specified recipes, templates, etc.
-      -d, --display                    Instead of running, show the template or recipe body
-      -r, --recipes                    Recipes to use
-      -s, --save                       Save current set of options
-      -u, --use                        Use a saved set of options
-      --gems                           Gems to include
+      Commands:
+      list                             List objects(instances, images, keys, storage, addresses)
+      instance [id] [operation]        operation for a special instance
+      image [id] [operation]           operation for a special image
+      storage [id] [operation]         operation for a special storage
+      address [id] [operation]         operation for a special address
+      request [id] [operation]         operation for a special request
+      key [key_name] [operation]       operation for a special key
 
       IbmCloudAdmin Info:
       -v, --version                    Show the IbmCloudAdmin version number and quit.
-      -l, --list                       Show the various recipes known to IbmCloudAdmin and quit.
       -h, --help                       Show this help message and quit.
 
       General Options:
 
       Description:
-      IbmCloudAdmin is used for Ibm Cloud Service.
+      ibmcloud_admin is used for IBM Cloud Service.
 
       Example:
+			ibmcloud_admin list instances
     } 
   end
 end

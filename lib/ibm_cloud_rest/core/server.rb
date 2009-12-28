@@ -42,12 +42,33 @@ module IbmCloudRest
     def default_instance
       available_instances[:default]
     end
-  
+
+    # Lists all storages on the server
+    def storages
+      IbmCloudRest.get "#{@uri}/storage"
+    end
+
+    # Lists all addresses on the server
+
+    def addresses
+      IbmCloudRest.get "#{@uri}/addresses"
+    end
+
+    # Lists all keys on the server
+    def keys
+      IbmCloudRest.get "#{@uri}/keys"
+    end
+ 
     # Lists all instances on the server
     def instances
       IbmCloudRest.get "#{@uri}/instances"
     end
   
+    # Lists all images on the server
+    def images
+      IbmCloudRest.get "#{@uri}/images"
+    end
+ 
     # Returns a IbmCloudRest::instance for the given name
     def instance(name)
       IbmCloudRest::instance.new(self, name)
