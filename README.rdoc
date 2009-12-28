@@ -9,7 +9,7 @@ To use this gem, you first need to register an account on https://www.ibm.com/cl
 == Usage Example for Manager Client 
 
 To list all instances:
-ibmcloud_admin -li
+ibmcloud_admin list instances
 
 == Note on Patches/Pull Requests
  
