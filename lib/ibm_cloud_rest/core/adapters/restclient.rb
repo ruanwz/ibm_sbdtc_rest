@@ -28,7 +28,12 @@ module RestClientAdapter
     end
   
     def put(uri, payload, headers={:accept => 'application/json'})
-      RestClient.put(uri, payload, headers)
+      #RestClient.put(uri, payload, headers)
+			config = read_config
+			strip=payload[1..-2]
+			debugger
+			#rest_put=RestClient::Request.new(:method => :put, :url => uri, :headers => headers,:user => config['user'], :password => config['password'], :payload => strip)
+			#rest_put.execute
     end
   
     def delete(uri, headers={:accept => 'application/json'})

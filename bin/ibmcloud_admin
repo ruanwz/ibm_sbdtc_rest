@@ -26,7 +26,7 @@ class IbmCloudAdmin < Thor
   desc 'key [key_name] [operation]', "operation for a specific key"
   def key(key_name,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
 						           else nil
 						           end
 		if operation_method
@@ -41,7 +41,7 @@ class IbmCloudAdmin < Thor
   desc 'request [id] [operation]', "operation for a specific request"
   def request(id,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
 						           else nil
 						           end
 		if operation_method
@@ -56,7 +56,9 @@ class IbmCloudAdmin < Thor
   desc 'instance [id] [operation]', "operation for a specific instance"
   def instance(id,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
+						           when "restart" then :restart			
+						           when "save" then :save			
 						           else nil
 						           end
 		if operation_method
@@ -71,7 +73,7 @@ class IbmCloudAdmin < Thor
   desc 'storage [id] [operation]', "operation for a specific storage"
   def storage(id,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
 						           else nil
 						           end
 		if operation_method
@@ -86,7 +88,7 @@ class IbmCloudAdmin < Thor
   desc 'address [id] [operation]', "operation for a specific address"
   def address(id,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
 						           else nil
 						           end
 		if operation_method
@@ -101,7 +103,7 @@ class IbmCloudAdmin < Thor
   desc 'image [id] [operation]', "operation for a specific image"
   def image(id,operation)
 		operation_method = case operation
-						           when "list" then :get			
+						           when "show" then :get			
 						           else nil
 						           end
 		if operation_method
@@ -145,8 +147,7 @@ class IbmCloudAdmin < Thor
           puts "expirationTime: "+ Time.at((e["expirationTime"].to_i)/1000).to_s
           puts "----------------------------------------------"
         end
-      end
-      if objects =~ /images/
+      elsif objects =~ /images/
         puts "Image List"
         puts "----------------------------------------------"
         json_result[objects].each do |e| 
@@ -159,6 +160,8 @@ class IbmCloudAdmin < Thor
           puts "createdTime: "+ Time.at((e["createdTime"].to_i)/1000).to_s
           puts "----------------------------------------------"
         end
+			else
+		    puts JSON.pretty_generate(json_result)
       end
 
 		else
@@ -198,7 +201,8 @@ class IbmCloudAdmin < Thor
       ibmcloud_admin is used for IBM Cloud Service.
 
       Example:
-			ibmcloud_admin list instances
+      ibmcloud_admin list instances
+      ibmcloud_admin instance 12345 show
     } 
   end
 end

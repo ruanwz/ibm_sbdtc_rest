@@ -21,5 +21,13 @@ module IbmCloudRest
 		def get(id)
       IbmCloudRest.get @uri+id.to_s
 		end
+		def restart(id)
+			doc={"state"=>"restart"}
+      IbmCloudRest.put(@uri+id.to_s, 'state=restart')
+		end
+		def save(id)
+      IbmCloudRest.put(@uri+id.to_s, "state: save\nname: saved_image\ndescription: saved at #{Time.now}")
+		end
+
 	end
 end
